@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -12,21 +13,26 @@ namespace LGW
         [SerializeField]
         private CellController cellPrefab;
 
-        public readonly List<CellController> CellList = new List<CellController>();
+        private const int Capacity = 100000;
 
-        public readonly Dictionary<Point, CellController> CellDictionary = new Dictionary<Point, CellController>();
+        public readonly List<CellController> CellList = new List<CellController>(Capacity);
 
-        public readonly List<Point> NewCells = new List<Point>();
+        public readonly Dictionary<Point, CellController> CellDictionary = new Dictionary<Point, CellController>(Capacity);
 
-        public readonly List<Point> DeathCells = new List<Point>();
+        public readonly List<Point> NewCells = new List<Point>(Capacity);
 
-        public readonly Dictionary<Point, bool> ProcessedCells = new Dictionary<Point, bool>();
+        public readonly List<Point> DeathCells = new List<Point>(Capacity);
+
+        public readonly Dictionary<Point, bool> ProcessedCells = new Dictionary<Point, bool>(Capacity);
 
         private PoolableCell poolableCell;
+
+        private Vector3 dragPosition;
 
         private void Awake()
         {
             this.poolableCell = new PoolableCell(this.cellPrefab);
+            this.poolableCell.PreloadAsync(1000, 3).Subscribe();
         }
 
         private void Update()
@@ -40,7 +46,8 @@ namespace LGW
                 this.NextGeneratioin();
             }
 
-            var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var camera = Camera.main;
+            var worldPoint = camera.ScreenToWorldPoint(Input.mousePosition);
             var id = new Point { x = Mathf.RoundToInt(worldPoint.x), y = Mathf.RoundToInt(worldPoint.y) };
 
             if(Input.GetMouseButton(0))
@@ -57,11 +64,21 @@ namespace LGW
                     this.RemoveCell(id);
                 }
             }
+            if(Input.GetMouseButtonDown(2))
+            {
+                this.dragPosition = worldPoint;
+            }
+            if(Input.GetMouseButton(2))
+            {
+                var diff = worldPoint - this.dragPosition;
+                camera.transform.position -= diff;
+                this.dragPosition = worldPoint;
+            }
 
-            var cameraSize = Camera.main.orthographicSize;
+            var cameraSize = camera.orthographicSize;
             cameraSize -= Input.mouseScrollDelta.y * 1f;
             cameraSize = Mathf.Max(1, cameraSize);
-            Camera.main.orthographicSize = cameraSize;
+            camera.orthographicSize = cameraSize;
         }
 
         public void NextGeneratioin()
