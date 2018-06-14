@@ -40,11 +40,22 @@ namespace LGW
                 this.NextGeneratioin();
             }
 
-            if(Input.GetMouseButtonDown(0))
+            var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var id = new Point { x = Mathf.RoundToInt(worldPoint.x), y = Mathf.RoundToInt(worldPoint.y) };
+
+            if(Input.GetMouseButton(0))
             {
-                var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                var id = new Point { x = Mathf.RoundToInt(worldPoint.x), y = Mathf.RoundToInt(worldPoint.y) };
-                this.ToggleCell(id);
+                if(!this.CellDictionary.ContainsKey(id))
+                {
+                    this.CreateCell(id);
+                }
+            }
+            if(Input.GetMouseButton(1))
+            {
+                if(this.CellDictionary.ContainsKey(id))
+                {
+                    this.RemoveCell(id);
+                }
             }
 
             var cameraSize = Camera.main.orthographicSize;
