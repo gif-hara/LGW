@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using HK.Framework;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace LGW
@@ -9,6 +10,21 @@ namespace LGW
     public sealed class CellController : MonoBehaviour
     {
         private Transform cachedTransform;
+
+        private Point id;
+        public Point Id
+        {
+            get
+            {
+                return this.id;
+            }
+            set
+            {
+                this.id = value;
+                var size = UserSettings.Instance.CellSize;
+                this.cachedTransform.localPosition = new Vector3(this.id.x * size, this.id.y * size);
+            }
+        }
 
         private void Awake()
         {

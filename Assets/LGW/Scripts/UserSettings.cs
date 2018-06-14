@@ -30,12 +30,12 @@ namespace LGW
         }
 
         [SerializeField]
-        private int cellSize = 20;
-        public int CellSize
+        private float cellSize = 20;
+        public float CellSize
         {
             get
             {
-                return this.cellSize;
+                return this.cellSize * 0.01f;
             }
             set
             {
