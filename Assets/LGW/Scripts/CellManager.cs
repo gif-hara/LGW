@@ -13,6 +13,12 @@ namespace LGW
         [SerializeField]
         private CellController cellPrefab;
 
+        [SerializeField]
+        private Color cellColor;
+
+        [SerializeField]
+        private int preloadNumber;
+
         private const int Capacity = 100000;
 
         public readonly List<CellController> CellList = new List<CellController>(Capacity);
@@ -30,7 +36,7 @@ namespace LGW
         private void Awake()
         {
             this.poolableCell = new PoolableCell(this.cellPrefab, this.transform);
-            this.poolableCell.PreloadAsync(1000, 3).Subscribe();
+            this.poolableCell.PreloadAsync(this.preloadNumber, 5).Subscribe();
         }
 
         public void NextGeneratioin()
@@ -58,6 +64,7 @@ namespace LGW
             Assert.IsFalse(this.CellDictionary.ContainsKey(id), $"id = {id}にセルが存在するのに生成しようとしました");
             var cell = this.poolableCell.Rent();
             cell.Id = id;
+            cell.SetColor(this.cellColor);
             this.CellList.Add(cell);
             this.CellDictionary.Add(id, cell);
         }

@@ -1,6 +1,7 @@
 ﻿using HK.Framework;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 
 namespace LGW
 {
@@ -9,6 +10,9 @@ namespace LGW
     /// </summary>
     public sealed class CellController : MonoBehaviour
     {
+        [SerializeField]
+        private SpriteRenderer graphic;
+
         private Transform cachedTransform;
 
         private Point id;
@@ -30,6 +34,11 @@ namespace LGW
         {
             this.cachedTransform = this.transform;
             this.cachedTransform.localScale = Vector3.one * UserSettings.Instance.CellSize;
+        }
+
+        public void SetColor(Color color)
+        {
+            this.graphic.color = color;
         }
 
         public void NextGeneration(CellManager manager)
