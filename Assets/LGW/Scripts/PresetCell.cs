@@ -10,15 +10,44 @@ namespace LGW
     /// </summary>
     public sealed class PresetCell
     {
-        private static Dictionary<string, List<Element>> elements = new Dictionary<string, List<Element>>();
+        private static Dictionary<string, ElementBundle> bundles = new Dictionary<string, ElementBundle>();
 
         public static void Apply(string text, CellManager manager, Point offset)
         {
-            List<Element> result;
-            if (!elements.TryGetValue(text, out result))
+            GetBundle(text).Elements.ForEach(r => r.Apply(manager, offset));
+        }
+
+        public static void ApplyFromCharCell(CellManager manager, Point offset, string text, CharCell charCell, int space)
+        {
+            var id = offset;
+            for(var i = 0; i < text.Length; ++i)
             {
-                result = new List<Element>();
-                elements.Add(text, result);
+                var message = charCell.GetMessage(text[i]);
+                Apply(message, manager, id);
+                id += new Point(GetBundle(message).Max.x + space, 0);
+            }
+        }
+
+        private static ElementBundle GetBundle(string text)
+        {
+            ElementBundle result;
+            if (!bundles.TryGetValue(text, out result))
+            {
+                result = new ElementBundle(text);
+                bundles.Add(text, result);
+            }
+
+            return result;
+        }
+
+        public class ElementBundle
+        {
+            public readonly List<Element> Elements = new List<Element>();
+
+            public Point Max { get; private set; }
+
+            public ElementBundle(string text)
+            {
                 var splitText = text.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 for (var y = 0; y < splitText.Length; y++)
                 {
@@ -26,19 +55,27 @@ namespace LGW
                     for (var x = 0; x < s.Length; ++x)
                     {
                         var c = s[x];
+                        var id = new Point(x, -y);
                         if (c == '*')
                         {
-                            result.Add(new Element { Id = new Point(x, -y), IsAlive = true });
+                            this.Elements.Add(new Element { Id = id, IsAlive = true });
                         }
                         else if (c == '-')
                         {
-                            result.Add(new Element { Id = new Point(x, -y), IsAlive = false });
+                            this.Elements.Add(new Element { Id = id, IsAlive = false });
                         }
+                        this.UpdateMax(id);
                     }
                 }
             }
 
-            result.ForEach(r => r.Apply(manager, offset));
+            private void UpdateMax(Point max)
+            {
+                this.Max = new Point(
+                    Mathf.Max(this.Max.x, max.x + 1),
+                    Mathf.Min(this.Max.y, max.y - 1)
+                );
+            }
         }
 
         public class Element

@@ -73,8 +73,8 @@ namespace LGW
 
             if (Input.GetKeyDown(KeyCode.W))
             {
-                var now = DateTime.Now;
-                Debug.Log(now);
+                var now = DateTime.Now.ToString();
+                PresetCell.ApplyFromCharCell(this.cellManager, id, now, this.charCell, 0);
             }
 
             var cameraSize = this.controlledCamera.orthographicSize;
