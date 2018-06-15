@@ -613,7 +613,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 6b6ca176-1309-4375-a508-b425608c9321
   projectName: _LGW
   organizationId: kitahara-hiroki
