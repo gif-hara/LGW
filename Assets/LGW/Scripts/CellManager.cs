@@ -29,7 +29,7 @@ namespace LGW
 
         private void Awake()
         {
-            this.poolableCell = new PoolableCell(this.cellPrefab);
+            this.poolableCell = new PoolableCell(this.cellPrefab, this.transform);
             this.poolableCell.PreloadAsync(1000, 3).Subscribe();
         }
 
