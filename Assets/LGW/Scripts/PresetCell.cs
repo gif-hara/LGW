@@ -10,27 +10,27 @@ namespace LGW
     /// </summary>
     public sealed class PresetCell
     {
-        private static Dictionary<TextAsset, List<Element>> elements = new Dictionary<TextAsset, List<Element>>();
+        private static Dictionary<string, List<Element>> elements = new Dictionary<string, List<Element>>();
 
-        public static void Apply(TextAsset textAsset, CellManager manager, Point offset)
+        public static void Apply(string text, CellManager manager, Point offset)
         {
             List<Element> result;
-            if(!elements.TryGetValue(textAsset, out result))
+            if (!elements.TryGetValue(text, out result))
             {
                 result = new List<Element>();
-                elements.Add(textAsset, result);
-                var splitText = textAsset.text.Split(new string[]{ System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                elements.Add(text, result);
+                var splitText = text.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                 for (var y = 0; y < splitText.Length; y++)
                 {
                     var s = splitText[y];
-                    for(var x = 0; x < s.Length; ++x)
+                    for (var x = 0; x < s.Length; ++x)
                     {
                         var c = s[x];
-                        if(c == '*')
+                        if (c == '*')
                         {
                             result.Add(new Element { Id = new Point(x, -y), IsAlive = true });
                         }
-                        else if(c == '-')
+                        else if (c == '-')
                         {
                             result.Add(new Element { Id = new Point(x, -y), IsAlive = false });
                         }

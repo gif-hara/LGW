@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace LGW
@@ -13,6 +14,9 @@ namespace LGW
 
         [SerializeField]
         private Camera controlledCamera;
+
+        [SerializeField]
+        private CharCell charCell;
 
         private Vector3 dragPosition;
 
@@ -63,9 +67,14 @@ namespace LGW
             {
                 if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha0 + i)))
                 {
-                    var t = CharFileLoader.Get((char)((int)'0' + i));
-                    PresetCell.Apply(t, this.cellManager, id);
+                    PresetCell.Apply(this.charCell.GetMessage((char)((int)'0' + i)), this.cellManager, id);
                 }
+            }
+
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                var now = DateTime.Now;
+                Debug.Log(now);
             }
 
             var cameraSize = this.controlledCamera.orthographicSize;
