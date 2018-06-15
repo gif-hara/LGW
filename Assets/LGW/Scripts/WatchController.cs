@@ -26,7 +26,7 @@ namespace LGW
         {
             while (true)
             {
-                PresetCell.ApplyFromCharCell(this.cellManager, new Point(0, 0), DateTime.Now.ToString(), this.charCell, -1);
+                PresetCell.ApplyFromCharCell(this.cellManager, new Point(0, 0), DateTime.Now.ToString(), this.charCell, 1);
                 var updateTime = Time.realtimeSinceStartup;
                 yield return new WaitForSecondsRealtime(this.displayWatchSeconds);
                 while(Time.realtimeSinceStartup - updateTime < 1.0f)
