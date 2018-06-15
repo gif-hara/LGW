@@ -2,6 +2,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.Assertions;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace LGW
 {
@@ -30,7 +33,7 @@ namespace LGW
         }
 
         [SerializeField]
-        private float cellSize = 20;
+        private float cellSize = 100;
         public float CellSize
         {
             get
@@ -49,5 +52,13 @@ namespace LGW
             SaveData.SetClass(KeyName, Instance);
             SaveData.Save();
         }
+
+#if UNITY_EDITOR
+        [MenuItem("SaveData/Clear")]
+        private static void Clear()
+        {
+            SaveData.Clear();
+        }
+#endif
     }
 }

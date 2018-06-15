@@ -27,8 +27,7 @@ namespace LGW
                 this.cellManager.NextGeneratioin();
             }
 
-            var camera = Camera.main;
-            var worldPoint = camera.ScreenToWorldPoint(Input.mousePosition);
+            var worldPoint = this.controlledCamera.ScreenToWorldPoint(Input.mousePosition + Vector3.forward * 10.0f);
             var id = new Point { x = Mathf.RoundToInt(worldPoint.x), y = Mathf.RoundToInt(worldPoint.y) };
 
             if (Input.GetMouseButton(0))
@@ -52,14 +51,23 @@ namespace LGW
             if (Input.GetMouseButton(2))
             {
                 var diff = worldPoint - this.dragPosition;
-                camera.transform.position -= diff;
+                this.controlledCamera.transform.position -= diff;
                 this.dragPosition = worldPoint;
             }
 
-            var cameraSize = camera.orthographicSize;
+            for(var i = 0; i < 10; ++i)
+            {
+                if (Input.GetKeyDown((KeyCode)((int)KeyCode.Alpha0 + i)))
+                {
+                    var t = CharFileLoader.Get((char)((int)'0' + i));
+                    PresetCell.Apply(t, this.cellManager, id);
+                }
+            }
+
+            var cameraSize = this.controlledCamera.orthographicSize;
             cameraSize -= Input.mouseScrollDelta.y * 1f;
             cameraSize = Mathf.Max(1, cameraSize);
-            camera.orthographicSize = cameraSize;
+            this.controlledCamera.orthographicSize = cameraSize;
         }
     }
 }
