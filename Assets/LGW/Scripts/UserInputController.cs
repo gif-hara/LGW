@@ -26,6 +26,10 @@ namespace LGW
             {
                 this.cellManager.NextGeneratioin();
             }
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                this.cellManager.RemoveAll();
+            }
 
             var worldPoint = this.controlledCamera.ScreenToWorldPoint(Input.mousePosition + Vector3.forward * 10.0f);
             var id = new Point { x = Mathf.RoundToInt(worldPoint.x), y = Mathf.RoundToInt(worldPoint.y) };

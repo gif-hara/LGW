@@ -71,6 +71,13 @@ namespace LGW
             this.CellDictionary.Remove(id);
         }
 
+        public void RemoveAll()
+        {
+            this.CellList.ForEach(c => this.poolableCell.Return(c));
+            this.CellList.Clear();
+            this.CellDictionary.Clear();
+        }
+
         public void ToggleCell(Point id)
         {
             if(this.CellDictionary.ContainsKey(id))
