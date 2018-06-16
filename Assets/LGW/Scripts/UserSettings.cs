@@ -20,6 +20,7 @@ namespace LGW
         {
             get
             {
+                SaveData.Clear();
                 var instance = SaveData.GetClass<UserSettings>(KeyName, null);
                 if(instance == null)
                 {
@@ -58,6 +59,12 @@ namespace LGW
         private static void Clear()
         {
             SaveData.Clear();
+        }
+
+        [MenuItem("SaveData/Path")]
+        private static void PrintPath()
+        {
+            Debug.Log(Application.persistentDataPath);
         }
 #endif
     }
