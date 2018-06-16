@@ -16,20 +16,27 @@ namespace LGW
     {
         private const string KeyName = "LGW.UserSettings";
 
+        private static UserSettings instance;
         public static UserSettings Instance
         {
             get
             {
-                SaveData.Clear();
-                var instance = SaveData.GetClass<UserSettings>(KeyName, null);
                 if(instance == null)
                 {
                     instance = new UserSettings();
-                    SaveData.SetClass(KeyName, instance);
-                    SaveData.Save();
                 }
 
                 return instance;
+                // SaveData.Clear();
+                // var instance = SaveData.GetClass<UserSettings>(KeyName, null);
+                // if(instance == null)
+                // {
+                //     instance = new UserSettings();
+                //     SaveData.SetClass(KeyName, instance);
+                //     SaveData.Save();
+                // }
+
+                // return instance;
             }
         }
 
