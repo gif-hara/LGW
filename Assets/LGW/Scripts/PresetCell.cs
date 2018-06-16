@@ -48,7 +48,14 @@ namespace LGW
 
             public ElementBundle(string text)
             {
-                var splitText = text.Split(new string[] { System.Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+                var separator = "¥n";
+#elif UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
+                var separator = System.Environment.NewLine;
+#else
+                var separator = System.Environment.NewLine;
+#endif
+                var splitText = text.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries);
                 for (var y = 0; y < splitText.Length; y++)
                 {
                     var s = splitText[y];
